@@ -25,6 +25,11 @@ const styles = StyleSheet.create({
   textContainer: {
     margin: 10,
   },
+  menuTitle: {
+    marginVertical: 20,
+    fontSize: 18,
+    letterSpacing: 0.7
+  }
 });
 
 export default styles;
