@@ -6,7 +6,7 @@ import restaurants from "../../../assets/data/restaurants.json";
 import Header from "./Header";
 import DishListItem from "../../components/DishListItem";
 
-import styles from "./styles"
+import styles from "./styles";
 
 const restaurant = restaurants[0];
 
