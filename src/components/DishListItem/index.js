@@ -1,1 +1,1 @@
-export { default } from './BasketDishItem';
+export { default } from './DishListItem';
