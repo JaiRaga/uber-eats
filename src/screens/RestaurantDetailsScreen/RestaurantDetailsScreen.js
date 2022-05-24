@@ -27,13 +27,16 @@ const RestaurantDetailsScreen = () => {
   const id = route.params.id;
 
   useEffect(() => {
+    if (!id) {
+      return;
+    }
     // fetch restaurant with the id
     DataStore.query(Restaurant, id).then(setRestaurant);
     // fetch the dishes with restaurant id equal to id received as params
     DataStore.query(Dish, (dish) => dish.restaurantID('eq', id)).then(
       setDishes
     );
-  }, []);
+  }, [id]);
 
   console.log(restaurant);
 
