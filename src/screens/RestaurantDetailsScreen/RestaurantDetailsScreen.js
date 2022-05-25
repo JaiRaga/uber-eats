@@ -1,10 +1,9 @@
 import {
   View,
   Text,
-  Image,
   FlatList,
-  StyleSheet,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +13,8 @@ import { Restaurant, Dish } from '../../models';
 // Components
 import Header from './Header';
 import DishListItem from '../../components/DishListItem';
+import { useBasketContext } from '../../context/BasketContext';
+
 // Styles
 import styles from './styles';
 
@@ -26,10 +27,19 @@ const RestaurantDetailsScreen = () => {
 
   const id = route.params.id;
 
+  const {
+    setRestaurant: setBasketRestaurant,
+    basket,
+    basketDishes,
+  } = useBasketContext();
+
   useEffect(() => {
     if (!id) {
       return;
     }
+    // clear the previous restaurant details
+    setBasketRestaurant(null);
+
     // fetch restaurant with the id
     DataStore.query(Restaurant, id).then(setRestaurant);
     // fetch the dishes with restaurant id equal to id received as params
@@ -38,7 +48,9 @@ const RestaurantDetailsScreen = () => {
     );
   }, [id]);
 
-  console.log(restaurant);
+  useEffect(() => {
+    setBasketRestaurant(restaurant);
+  }, [restaurant]);
 
   if (!restaurant) {
     return (
@@ -65,6 +77,16 @@ const RestaurantDetailsScreen = () => {
         color="white"
         style={styles.imageIcon}
       />
+      {basket && (
+        <Pressable
+          onPress={() => navigation.navigate('Basket')}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>
+            Open Basket ({basketDishes.length})
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 };
