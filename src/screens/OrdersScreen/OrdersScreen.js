@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import React from 'react';
 import OrderListItem from '../../components/OrderListItem/OrderListItem';
-import orders from '../../../assets/data/orders.json';
+import { useOrderContext } from '../../context/OrderContext';
 
 const OrdersScreen = () => {
+  const { orders } = useOrderContext();
   return (
     <View style={styles.container}>
       <FlatList
