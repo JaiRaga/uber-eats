@@ -1,37 +1,32 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-import restaurants from '../../../assets/data/restaurants.json';
+// import restaurants from '../../../assets/data/restaurants.json';
 import BasketDishItem from '../../components/BasketDishItem/BasketDishItem';
-const restaurant = restaurants[0];
+import { useBasketContext } from '../../context/BasketContext';
+import { useOrderContext } from '../../context/OrderContext';
 
 const BasketScreen = () => {
-  const [quantity, setQuantity] = useState(1);
+  const navigation = useNavigation()
+  const { restaurant, basketDishes, totalPrice } = useBasketContext();
+  const { createOrder } = useOrderContext();
 
-  const onMinus = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const onPlus = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const getTotal = () => {
-    return (dish.price * quantity).toFixed(2);
-  };
+  const onCreateOrder = async () => {
+    await createOrder()
+    navigation.navigate("Restaurants")
+  }
 
   return (
     <View style={styles.page}>
-      <Text style={styles.name}>{restaurant.name}</Text>
+      <Text style={styles.name}>{restaurant?.name}</Text>
 
       <Text style={styles.yourItem}>Your items</Text>
 
       {/* Items Container */}
       <FlatList
-        data={restaurant.dishes}
+        data={basketDishes}
         renderItem={({ item }) => <BasketDishItem basketDish={item} />}
         keyExtractor={(item, index) => index}
       />
@@ -39,9 +34,11 @@ const BasketScreen = () => {
       <View style={styles.separator} />
 
       {/* Button Checkout */}
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>Create Order</Text>
-      </View>
+      <Pressable onPress={onCreateOrder} style={styles.button}>
+        <Text style={styles.buttonText}>
+          Create Order &#8226; ${totalPrice.toFixed(2)}
+        </Text>
+      </Pressable>
     </View>
   );
 };
